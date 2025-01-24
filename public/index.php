@@ -127,6 +127,10 @@ Lastname:
 <input type="submit">
 </form>
 <p/>
+<h3>CSV test</h3>
+<?php echo proc_csv("../data/dat-doublequote-tab.csv","\t","\"", "1:3:4:7");
+?>
+
 </div> <!-- end of big div -->
 
 <?php echo "Container IP Address:".getenv('MY_IP')."\n"; ?>
