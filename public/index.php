@@ -11,6 +11,8 @@
       let randomBits = ["hello world", "random thoughts", "pinky and the brain"];
       document.getElementById("demo").innerHTML = randomBits[Math.floor(Math.random()*3)];
   }
+
+  
   </script>
 
   <!-- style -->
@@ -42,6 +44,13 @@
 
 <!-- PHP testing area ................................ --> 
 <?php
+   include "action.php";
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors',1);
+    error_reporting(E_ALL);
+
+    echo "<h3>CSV test</h3>";
+    proc_csv('data.dat', ',', '"', 'all');
 
    echo "<h1> Choe's Experimental CSCE 331 Docker Web Site </h1>\n";
 
@@ -51,35 +60,37 @@
 
    echo "<h3>Testing file loading:</h3>\n";
 
+  
+   
    # FILE access 
    # $h = fopen("false.dat","r");
 
-   $handle = fopen("data.dat","r") or die("Cannot open data.dat");
+//    $handle = fopen("data.dat","r") or die("Cannot open data.dat");
 
-   echo "<table  border=\"1\">\n";
+//    echo "<table  border=\"1\">\n";
 
-   while ($data = fgets($handle)) {
-        echo "<tr>\n";
-        $data_cols = preg_split('/,/',$data);
-        for ($k=0; $k<count($data_cols); ++$k) {
-            echo "  <td> ".$data_cols[$k]." </td>\n";
-        }
-        echo "</tr>\n";
-   }
+//    while ($data = fgets($handle)) {
+//         echo "<tr>\n";
+//         $data_cols = preg_split('/,/',$data);
+//         for ($k=0; $k<count($data_cols); ++$k) {
+//             echo "  <td> ".$data_cols[$k]." </td>\n";
+//         }
+//         echo "</tr>\n";
+//    }
 
-   fclose($handle);
+//    fclose($handle);
 
-   echo "</table>\n<p/>";
+//    echo "</table>\n<p/>";
    
 
-   echo "Debug: ";
-   print_r($data_cols); 
+//    echo "Debug: ";
+//    print_r($data_cols); 
 
-   echo "<p/>";
+//    echo "<p/>";
 
-   echo "rand : ".$data_cols[rand(0,1)]."\n";
+//    echo "rand : ".$data_cols[rand(0,1)]."\n";
 
-   echo "<p/>";
+//    echo "<p/>";
 
 ?>
 
@@ -127,9 +138,7 @@ Lastname:
 <input type="submit">
 </form>
 <p/>
-<h3>CSV test</h3>
-<?php echo proc_csv("../data/dat-doublequote-tab.csv","\t","\"", "1:3:4:7");
-?>
+
 
 </div> <!-- end of big div -->
 
