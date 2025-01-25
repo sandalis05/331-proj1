@@ -34,7 +34,9 @@ function proc_csv($filename, $delimiter, $quote, $columns_to_show) {
   if (strtolower($columns_to_show) === "all") {
       $selected_columns = array_keys($header_row);
   } else {
-      $selected_columns = array_map('intval', explode(':', $columns_to_show));
+    $selected_columns = array_map(function($col) {
+      return $col - 1;
+    }, array_map('intval', explode(':', $columns_to_show)));
   }
 
   echo "<table border='1' style='border-collapse: collapse;'>";

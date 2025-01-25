@@ -51,7 +51,8 @@
 
     echo "<h3>CSV tests</h3>";
     proc_csv('data.dat', ',', '"', 'all');
-    proc_csv('data/dat-doublequote-comma.csv', ',', '"', 'all');
+    proc_csv('data/dat-doublequote-comma.csv', ',', '"', "all");
+    proc_csv('data/dat-doublequote-comma.csv', ',', '"', "1:3");
     proc_csv('data/dat-doublequote-tab.csv', "\t", '"', 'all');
     proc_csv('data/dat2-doublequote-comma.csv', ',', '"', 'all');
     proc_csv('data/dat2-doublequote-tab.csv', "\t", '"', 'all');
