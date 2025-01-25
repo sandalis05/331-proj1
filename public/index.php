@@ -49,8 +49,14 @@
     ini_set('display_startup_errors',1);
     error_reporting(E_ALL);
 
-    echo "<h3>CSV test</h3>";
+    echo "<h3>CSV tests</h3>";
     proc_csv('data.dat', ',', '"', 'all');
+    proc_csv('data/dat-doublequote-comma.csv', ',', '"', 'all');
+    proc_csv('data/dat-doublequote-tab.csv', "\t", '"', 'all');
+    proc_csv('data/dat2-doublequote-comma.csv', ',', '"', 'all');
+    proc_csv('data/dat2-doublequote-tab.csv', "\t", '"', 'all');
+    proc_csv('data/dat2-singlequote-tab.csv', "\t", "'", 'all');
+
 
    echo "<h1> Choe's Experimental CSCE 331 Docker Web Site </h1>\n";
 
