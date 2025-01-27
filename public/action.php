@@ -18,6 +18,38 @@ function proc_action($mode) {
 
 proc_action($_GET["getName"]);
 
+function fgetcsv_custom($file_handle, $length, $delimiter, $quote) {
+  $line = fgets($file_handle);
+  if ($line === false) {
+    return false;
+  }
+
+  $fields  = [];
+  $field = '';
+  $in_quotes = false;
+  $line_length = strlen($line);
+
+  for ($i = 0; $i < $line_length; $i++) {
+    $char = $line[$i];
+    if ($char === $quote){
+      $in_quotes = !$in_quotes;
+    }
+    elseif ($char === $delimiter && !$in_quotes){
+      $fields[] = $field;
+      $field = '';
+    }
+    elseif ($char === "\n" || $char === "\r") {
+      continue;
+    } 
+    else {
+      $field .= $char;
+    }
+  }
+
+  $fields[] = $field;
+  return $fields;
+}
+
 function proc_csv($filename, $delimiter, $quote, $columns_to_show) {
   if (!file_exists($filename)) {
       echo "file does not exist";
@@ -30,7 +62,7 @@ function proc_csv($filename, $delimiter, $quote, $columns_to_show) {
       return;
   }
 
-  $header_row = fgetcsv($file_handle, 0, $delimiter, $quote);
+  $header_row = fgetcsv_custom($file_handle, 0, $delimiter, $quote);
   if (strtolower($columns_to_show) === "all") {
       $selected_columns = array_keys($header_row);
   } else {
@@ -48,7 +80,7 @@ function proc_csv($filename, $delimiter, $quote, $columns_to_show) {
   }
   echo "</tr>";
 
-  while (($row = fgetcsv($file_handle, 0, $delimiter, $quote)) !== false) {
+  while (($row = fgetcsv_custom($file_handle, 0, $delimiter, $quote)) !== false) {
       echo "<tr>";
       foreach ($selected_columns as $index) {
           $cell_value = $row[$index] ?? "N/A";
