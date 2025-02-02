@@ -18,6 +18,7 @@ Fetch and display HTML code from a URL.
 <li> You can look for other ways. 
 <li> This was tested on both docker and Infinityfree.
 <li> You may use any PHP built in function for URL validation, HTML code tag removal, etc. etc.
+<li> UPDATE (1/30/2025): Use locally valid IP address like 192.168.0.10 instead of localhost or 127.0.0.1. For example, http://192.168.0.10:5555/index.php .
 </ol>
 
 <p/>
@@ -39,8 +40,13 @@ if (filter_var($url,FILTER_VALIDATE_URL)) {
 
   # PHP system call to get html from URL
 #  $html = file_get_contents(getcwd().$url);  
-   $html = file_get_contents($url);  
+   $html = file_get_contents($url); 
 
+  # print out raw html, formatted with a php function
+  echo "** Printing RAW HTML **";
+  echo htmlspecialchars($html);
+
+  echo "** Testing tag processing **";
   # Repalce HTML tags
   #$html = preg_replace("/</","[",$html);
   #$html = preg_replace("/>/","]",$html);
@@ -68,8 +74,8 @@ if (filter_var($url,FILTER_VALIDATE_URL)) {
   echo '[$doc->saveHTML() ===============================================================\n';
   echo $doc->saveHTML();
   
-  echo '[$html ===============================================================\n';
-  echo "$html\n";
+  #echo '[$html ===============================================================\n';
+  #echo "$html\n";
   echo "</pre>\n";
 
 } else {
