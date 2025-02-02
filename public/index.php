@@ -55,13 +55,39 @@
    echo " Testing PHP <br>\n";
    echo " Hello world!<p/>\n";
 
+   //for search
+   echo "<h1>Search the site</h1>";
+   echo '<form action="index.php" method="get">
+            <input type="text" name="query" placeholder="Enter search term..." required>
+            <input type="submit" value="Search">
+         </form>';
 
+   require_once("search.php");
+
+   if (isset($_GET['query'])) {
+       $query = $_GET['query'];
+       $search_results = search($query);
+
+       echo "<h4>Results: " . htmlspecialchars($query) . "</h4>";
+
+       if (is_array($search_results) && !empty($search_results)) {
+           echo "<ul>";
+           foreach ($search_results as $file) {
+               echo "<li><a href='$file'>$file</a></li>";
+           }
+           echo "</ul>";
+       }
+       else {
+           echo "<p>No results found.</p>";
+       }
+   }
+
+  //file loading 
    echo "<h3>Testing file loading:</h3>\n";
 
    require_once("proc_markdown.php");
    echo "<h3>Testing the github markdown<h3>";
    echo proc_markdown("markdown.md");
-
   
    
    # FILE access 
