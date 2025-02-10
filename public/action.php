@@ -20,6 +20,81 @@ function proc_action($mode) {
 # Test function call
 proc_action($_GET["getName"]);
 
+function fgetcsv_custom($file_handle, $length, $delimiter, $quote) {
+  $line = fgets($file_handle);
+  if ($line === false) {
+    return false;
+  }
+
+  $fields  = [];
+  $field = '';
+  $in_quotes = false;
+  $line_length = strlen($line);
+
+  for ($i = 0; $i < $line_length; $i++) {
+    $char = $line[$i];
+    if ($char === $quote){
+      $in_quotes = !$in_quotes;
+    }
+    elseif ($char === $delimiter && !$in_quotes){
+      $fields[] = $field;
+      $field = '';
+    }
+    elseif ($char === "\n" || $char === "\r") {
+      continue;
+    } 
+    else {
+      $field .= $char;
+    }
+  }
+
+  $fields[] = $field;
+  return $fields;
+}
+
+function proc_csv($filename, $delimiter, $quote, $columns_to_show) {
+  if (!file_exists($filename)) {
+      echo "file does not exist";
+      return;
+  }
+
+  $file_handle = fopen($filename, "r");
+  if ($file_handle === false) {
+      echo "error unavle to open file";
+      return;
+  }
+
+  $header_row = fgetcsv_custom($file_handle, 0, $delimiter, $quote);
+  if (strtolower($columns_to_show) === "all") {
+      $selected_columns = array_keys($header_row);
+  } else {
+    $selected_columns = array_map(function($col) {
+      return $col - 1;
+    }, array_map('intval', explode(':', $columns_to_show)));
+  }
+
+  echo "<table border='1' style='border-collapse: collapse;'>";
+
+  echo "<tr style='font-weight: bold;'>";
+  foreach ($selected_columns as $index) {
+      $header_value = $header_row[$index] ?? "N/A";
+      echo "<th>" . htmlspecialchars($header_value) . "</th>";
+  }
+  echo "</tr>";
+
+  while (($row = fgetcsv_custom($file_handle, 0, $delimiter, $quote)) !== false) {
+      echo "<tr>";
+      foreach ($selected_columns as $index) {
+          $cell_value = $row[$index] ?? "N/A";
+          echo "<td>" . htmlspecialchars($cell_value) . "</td>";
+      }
+      echo "</tr>";
+  }
+
+  echo "</table>";
+  fclose($file_handle);
+}
+
 
 # URL usage: action.php?getName=string
 if ($_GET["getName"]) {
