@@ -1,27 +1,40 @@
 <?php
 
-function proc_gallery($folder, $mode, $sort_mode) {
-    if (!is_dir($folder)) {
-        echo "<p>Error: Image folder not found.</p>";
+function proc_gallery($image_list_filename, $mode, $sort_mode) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    if (!file_exists($image_list_filename) || !is_file($image_list_filename)) {
         return;
     }
 
     $images = [];
 
-    // Scan the folder for image files
-    foreach (scandir($folder) as $file) {
-        if (in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif'])) {
-            $filePath = $folder . "/" . $file;
+    $file = fopen($image_list_filename, "r");
+    while (($line = fgets($file)) !== false) {
+        $line = trim($line);
+        $data = explode(",", $line);
+        if (count($data) < 2) continue;
+
+        $filename = trim($data[0]);
+        $description = trim($data[1]);
+
+        if (file_exists($filename)) {
             $images[] = [
-                "filename" => $filePath,
-                "description" => pathinfo($file, PATHINFO_FILENAME), // Use filename as description
-                "size" => filesize($filePath),
-                "date" => filemtime($filePath)
+                "filename" => $filename,
+                "description" => $description,
+                "size" => filesize($filename),
+                "date" => filemtime($filename)
             ];
         }
     }
+    fclose($file);
 
-    // Sorting logic
+    if (empty($images)) {
+        return;
+    }
+
     switch ($sort_mode) {
         case "date_newest":
             usort($images, fn($a, $b) => $b["date"] - $a["date"]);
@@ -39,12 +52,11 @@ function proc_gallery($folder, $mode, $sort_mode) {
             shuffle($images);
             break;
         default:
-            // Keep original order
             break;
     }
 
-    // Display images based on mode
     echo "<div class='gallery'>";
+
     if ($mode == "matrix") {
         echo "<div class='matrix'>";
         foreach ($images as $img) {
@@ -76,6 +88,7 @@ function proc_gallery($folder, $mode, $sort_mode) {
         }
         echo "</table>";
     }
+
     echo "</div>";
 }
 ?>

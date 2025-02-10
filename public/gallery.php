@@ -1,10 +1,9 @@
 <?php
 require_once("proc_gallery.php");
 
-// Default parameters
-$image_folder = "images"; // Folder containing images
-$mode = isset($_GET['mode']) ? $_GET['mode'] : "matrix"; // Default to matrix view
-$sort_mode = isset($_GET['sort']) ? $_GET['sort'] : "orig"; // Default sorting
+$image_list_filename = "images.csv"; 
+$mode = isset($_GET['mode']) ? $_GET['mode'] : "matrix"; 
+$sort_mode = isset($_GET['sort']) ? $_GET['sort'] : "orig"; 
 
 ?>
 
@@ -80,7 +79,6 @@ $sort_mode = isset($_GET['sort']) ? $_GET['sort'] : "orig"; // Default sorting
 
 <h2>Image Gallery</h2>
 
-<!-- Controls for view mode and sorting -->
 <label for="mode">View Mode:</label>
 <select id="mode" onchange="updateView()">
     <option value="matrix" <?= $mode == "matrix" ? "selected" : "" ?>>Matrix</option>
@@ -100,9 +98,9 @@ $sort_mode = isset($_GET['sort']) ? $_GET['sort'] : "orig"; // Default sorting
 
 <hr>
 
-<!-- Gallery Display -->
+
 <?php
-proc_gallery($image_folder, $mode, $sort_mode);
+proc_gallery($image_list_filename, $mode, $sort_mode);
 ?>
 
 </body>
