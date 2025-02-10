@@ -2,7 +2,7 @@
 
 <!-- HEAD section ............................................................................ -->
 <head>
-  <title> Yoonsuck Choe's Experimental Web Site </title>
+  <title> Sandali's Experimental Web Site </title>
 
 
   <!-- javascript functions -->
@@ -49,6 +49,8 @@
     ini_set('display_startup_errors',1);
     error_reporting(E_ALL);
 
+    echo "<h1> Sandali's Experimental CSCE 331 Docker Web Site </h1>\n";
+
     echo "<h3>CSV tests</h3>";
     proc_csv('data.dat', ',', '"', 'all');
     proc_csv('data/dat-doublequote-comma.csv', ',', '"', "all");
@@ -59,7 +61,40 @@
     proc_csv('data/dat2-singlequote-tab.csv', "\t", "'", 'all');
 
 
-   echo "<h1> Choe's Experimental CSCE 331 Docker Web Site </h1>\n";
+   //for search
+   echo "<h1>Search the site</h1>";
+   echo '<form action="index.php" method="get">
+            <input type="text" name="query" placeholder="Enter search term..." required>
+            <input type="submit" value="Search">
+         </form>';
+
+   require_once("search.php");
+
+   if (isset($_GET['query'])) {
+       $query = $_GET['query'];
+       $search_results = search($query);
+
+       echo "<h4>Results: " . htmlspecialchars($query) . "</h4>";
+
+       if (is_array($search_results) && !empty($search_results)) {
+           echo "<ul>";
+           foreach ($search_results as $file) {
+               echo "<li><a href='$file'>$file</a></li>";
+           }
+           echo "</ul>";
+       }
+       else {
+           echo "<p>No results found.</p>";
+       }
+   }
+
+     //file loading 
+     echo "<h3>Testing file loading:</h3>\n";
+
+     require_once("proc_markdown.php");
+     echo "<h3>Testing the github markdown<h3>";
+     echo proc_markdown("markdown.md");
+
 
    echo "<font color=\"green\"> Haha update and redeploy </font><p/>\n";
    echo " Testing PHP <br>\n";
