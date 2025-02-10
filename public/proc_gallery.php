@@ -58,7 +58,7 @@ function proc_gallery($image_list_filename, $mode, $sort_mode) {
     echo "<div class='gallery'>";
 
     if ($mode == "matrix") {
-        echo "<div class='matrix'>";
+        echo "<div class='matrix' id='matrix-gallery'>";
         foreach ($images as $img) {
             echo "<div class='img-container'>
                     <img src='{$img['filename']}' alt='Image'>
@@ -66,6 +66,28 @@ function proc_gallery($image_list_filename, $mode, $sort_mode) {
                   </div>";
         }
         echo "</div>";
+
+        echo "<script>
+                document.getElementById('matrix-gallery').style.display = 'flex';
+                document.getElementById('matrix-gallery').style.flexWrap = 'wrap';
+                document.getElementById('matrix-gallery').style.justifyContent = 'center';
+                document.getElementById('matrix-gallery').style.gap = '10px';
+
+                let containers = document.querySelectorAll('.img-container');
+                containers.forEach(container => {
+                    container.style.width = '30%'; // Ensures a row format
+                    container.style.border = '1px solid black';
+                    container.style.padding = '5px';
+                    container.style.textAlign = 'center';
+                });
+
+                let images = document.querySelectorAll('.gallery img');
+                images.forEach(img => {
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.borderRadius = '5px';
+                });
+              </script>";
     } elseif ($mode == "list") {
         echo "<ul class='list-view'>";
         foreach ($images as $img) {
